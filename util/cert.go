@@ -1,6 +1,6 @@
 // Package cert contains certificate specifications and
 // certificate-specific management.
-package cert
+package util
 
 import (
 	"crypto/ecdsa"
@@ -13,7 +13,7 @@ import (
 )
 
 // Compare if hostnames in certificate and spec are equal
-func hostnamesMatchesCertificate(hosts []string, cert *x509.Certificate) bool {
+func CertificateMatchesHostname(hosts []string, cert *x509.Certificate) bool {
 	a := make([]string, len(hosts))
 	for idx := range hosts {
 		// normalize the IPs.
@@ -44,7 +44,7 @@ func hostnamesMatchesCertificate(hosts []string, cert *x509.Certificate) bool {
 	return true
 }
 
-func verifyCertChain(ca *x509.Certificate, cert *x509.Certificate) error {
+func CertificateChainVerify(ca *x509.Certificate, cert *x509.Certificate) error {
 	roots := x509.NewCertPool()
 	roots.AddCert(ca)
 	_, err := cert.Verify(x509.VerifyOptions{
@@ -53,7 +53,7 @@ func verifyCertChain(ca *x509.Certificate, cert *x509.Certificate) error {
 	return err
 }
 
-func encodeKeyToPem(key interface{}) ([]byte, error) {
+func EncodeKeyToPem(key interface{}) ([]byte, error) {
 	switch key.(type) {
 	case *ecdsa.PrivateKey:
 		data, err := x509.MarshalECPrivateKey(key.(*ecdsa.PrivateKey))
@@ -78,7 +78,7 @@ func encodeKeyToPem(key interface{}) ([]byte, error) {
 }
 
 // encodeCertificateToPEM serialize a certificate into pem format
-func encodeCertificateToPEM(cert *x509.Certificate) []byte {
+func EncodeCertificateToPEM(cert *x509.Certificate) []byte {
 	return pem.EncodeToMemory(
 		&pem.Block{
 			Type:  "CERTIFICATE",

@@ -402,12 +402,12 @@ func (spec *Spec) checkDiskPKI(cert *x509.Certificate, keyData []byte) error {
 		return fmt.Errorf("subject has changed: was %s, now is %s", cert.Subject, csrRequest.Name())
 	}
 
-	if !hostnamesMatchesCertificate(csrRequest.Hosts, cert) {
+	if !util.CertificateMatchesHostname(csrRequest.Hosts, cert) {
 		return errors.New("DNS names in cert on disk don't match with hostnames in spec")
 	}
 
 	// Check if cert and key are valid pair
-	tlsCert, err := tls.X509KeyPair(encodeCertificateToPEM(cert), keyData)
+	tlsCert, err := tls.X509KeyPair(util.EncodeCertificateToPEM(cert), keyData)
 	if err != nil || tlsCert.Leaf != nil {
 		return fmt.Errorf("certificate and key on disk are not valid keypair: %s", err)
 	}
@@ -459,7 +459,7 @@ func (spec *Spec) checkDiskCertKey(ca *x509.Certificate) error {
 		return errors.WithMessage(err, "key requires regeneration due to permissions")
 	}
 
-	err = verifyCertChain(ca, existingCert)
+	err = util.CertificateChainVerify(ca, existingCert)
 	if err != nil {
 		log.Debugf("spec %s: CA has changed, cert is no longer valid via it: %s", spec, err)
 		return err
@@ -617,7 +617,7 @@ func (spec *Spec) writePKIToDisk(ca *x509.Certificate, keyPair *tls.Certificate)
 		return nil
 	}
 
-	keyData, err := encodeKeyToPem(keyPair.PrivateKey)
+	keyData, err := util.EncodeKeyToPem(keyPair.PrivateKey)
 	if err != nil {
 		return
 	}

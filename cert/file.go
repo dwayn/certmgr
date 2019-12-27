@@ -14,6 +14,8 @@ import (
 	"strconv"
 	"syscall"
 
+	"github.com/cloudflare/certmgr/util"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -225,7 +227,7 @@ func (cf *CertificateFile) ReadCertificate() (*x509.Certificate, error) {
 
 // WriteCertificate serialize and write a certificate to disk
 func (cf *CertificateFile) WriteCertificate(cert *x509.Certificate) error {
-	return cf.WriteFile(encodeCertificateToPEM(cert))
+	return cf.WriteFile(util.EncodeCertificateToPEM(cert))
 }
 
 // UnmarshalYAML implement yaml unmarshalling logic
