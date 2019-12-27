@@ -20,6 +20,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/cenkalti/backoff"
+	"github.com/cloudflare/certmgr/file"
 	"github.com/cloudflare/certmgr/svcmgr"
 	"github.com/cloudflare/certmgr/util"
 	"github.com/cloudflare/cfssl/csr"
@@ -134,10 +135,10 @@ type Spec struct {
 	Request *csr.CertificateRequest `json:"request" yaml:"request"`
 
 	// Key contains the file metadata for the private key.
-	Key *File `json:"private_key" yaml:"private_key"`
+	Key *file.File `json:"private_key" yaml:"private_key"`
 
 	// Cert contains the file metadata for the certificate.
-	Cert *CertificateFile `json:"certificate" yaml:"certificate"`
+	Cert *file.CertificateFile `json:"certificate" yaml:"certificate"`
 
 	// CA specifies the certificate authority that should be used.
 	CA CA `json:"authority" yaml:"authority"`

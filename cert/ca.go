@@ -10,6 +10,7 @@ import (
 	"errors"
 	"io/ioutil"
 
+	"github.com/cloudflare/certmgr/file"
 	"github.com/cloudflare/cfssl/api/client"
 	"github.com/cloudflare/cfssl/info"
 )
@@ -18,14 +19,14 @@ import (
 // to use this: fill out Name to refer to a global CA (e.g. as defined
 // in the config file) or fill out Remote, Label, Profile, and AuthKey.
 type CA struct {
-	Name        string           `json:"name" yaml:"name"`
-	Remote      string           `json:"remote" yaml:"remote"`
-	Label       string           `json:"label" yaml:"label"`
-	Profile     string           `json:"profile" yaml:"profile"`
-	AuthKey     string           `json:"auth_key" yaml:"auth_key"`
-	AuthKeyFile string           `json:"auth_key_file" yaml:"auth_key_file"`
-	File        *CertificateFile `json:"file,omitempty" yaml:"file,omitempty"`
-	RootCACert  string           `json:"root_ca,omitempty" yaml:"root_ca,omitempty"`
+	Name        string                `json:"name" yaml:"name"`
+	Remote      string                `json:"remote" yaml:"remote"`
+	Label       string                `json:"label" yaml:"label"`
+	Profile     string                `json:"profile" yaml:"profile"`
+	AuthKey     string                `json:"auth_key" yaml:"auth_key"`
+	AuthKeyFile string                `json:"auth_key_file" yaml:"auth_key_file"`
+	File        *file.CertificateFile `json:"file,omitempty" yaml:"file,omitempty"`
+	RootCACert  string                `json:"root_ca,omitempty" yaml:"root_ca,omitempty"`
 }
 
 func (ca *CA) getRemoteCert() (*x509.Certificate, error) {
