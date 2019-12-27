@@ -3,11 +3,9 @@
 package cert
 
 import (
-	"bytes"
 	"crypto/ecdsa"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/json"
 	"encoding/pem"
 	"errors"
 	"net"
@@ -87,19 +85,4 @@ func encodeCertificateToPEM(cert *x509.Certificate) []byte {
 			Bytes: cert.Raw,
 		},
 	)
-}
-
-// strictJSONUnmarshal unmarshals a byte source into the given interface while also
-// enforcing that there is no unknown fields
-func strictJSONUnmarshal(data []byte, object interface{}) error {
-	dec := json.NewDecoder(bytes.NewReader(data))
-	dec.DisallowUnknownFields()
-	err := dec.Decode(object)
-	if err != nil {
-		return err
-	}
-	if dec.More() {
-		return errors.New("multiple json objects found, only one is allowed")
-	}
-	return nil
 }

@@ -1,7 +1,9 @@
 package util
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -22,4 +24,19 @@ func (d *ParsableDuration) UnmarshalJSON(data []byte) error {
 	}
 
 	return err
+}
+
+// StrictJSONUnmarshal unmarshals a byte source into the given interface while also
+// enforcing that there is no unknown fields
+func StrictJSONUnmarshal(data []byte, object interface{}) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.DisallowUnknownFields()
+	err := dec.Decode(object)
+	if err != nil {
+		return err
+	}
+	if dec.More() {
+		return errors.New("multiple json objects found, only one is allowed")
+	}
+	return nil
 }

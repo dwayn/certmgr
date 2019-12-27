@@ -240,7 +240,7 @@ func (spec *Spec) loadFromPath(path string) error {
 
 	switch filepath.Ext(path) {
 	case ".json":
-		err = strictJSONUnmarshal(in, &spec)
+		err = util.StrictJSONUnmarshal(in, &spec)
 	case ".yml", ".yaml":
 		err = yaml.UnmarshalStrict(in, &spec)
 	default:
