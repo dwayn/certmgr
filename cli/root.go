@@ -6,15 +6,14 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"sort"
 	"strings"
 	"syscall"
 	"time"
 
 	"github.com/cloudflare/certmgr/cert"
+	"github.com/cloudflare/certmgr/cert/storage"
 	"github.com/cloudflare/certmgr/metrics"
 	"github.com/cloudflare/certmgr/mgr"
-	"github.com/cloudflare/certmgr/svcmgr"
 	log "github.com/sirupsen/logrus"
 
 	// needed for ensuring cfssl logs go through logrus
@@ -143,12 +142,7 @@ func init() {
 
 	RootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "f", "", "config file (default is /etc/certmgr/certmgr.yaml)")
 	RootCmd.PersistentFlags().StringVarP(&manager.Dir, "dir", "d", "", "either the directory containing certificate specs, or the path to the spec file you wish to operate on")
-	backends := []string{}
-	for backend := range svcmgr.SupportedBackends {
-		backends = append(backends, backend)
-	}
-	sort.Strings(backends)
-	RootCmd.PersistentFlags().StringVarP(&manager.ServiceManager, "svcmgr", "m", "", fmt.Sprintf("service manager, must be one of: %s", strings.Join(backends, ", ")))
+	RootCmd.PersistentFlags().StringVarP(&manager.ServiceManager, "svcmgr", "m", "", fmt.Sprintf("service manager, must be one of: %s", strings.Join(storage.SupportedServiceBackends, ", ")))
 	RootCmd.PersistentFlags().DurationVarP(&manager.Before, "before", "t", mgr.DefaultBefore, "how long before certificates expire to start renewing (in duration format)")
 	RootCmd.PersistentFlags().DurationVarP(&manager.Interval, "interval", "i", mgr.DefaultInterval, "how long to sleep before checking for renewal (in duration format)")
 	RootCmd.PersistentFlags().DurationVarP(&manager.IntervalSplay, "interval.splay", "", 0*time.Second, "a rng value of [0..interval.splay] to add to each interval to randomize wake time")

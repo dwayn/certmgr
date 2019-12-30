@@ -207,6 +207,10 @@ func (f *File) Unlink() error {
 	return err
 }
 
+func (f *File) String() string {
+	return f.Path
+}
+
 // CertificateFile is a convenience wrapper of File
 type CertificateFile struct {
 	File
