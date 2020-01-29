@@ -6,6 +6,7 @@ require (
 	github.com/cenkalti/backoff v2.2.1+incompatible
 	github.com/cloudflare/backoff v0.0.0-20161212185259-647f3cdfc87a // indirect
 	github.com/cloudflare/cfssl v0.0.0-20190627231140-2001f384ec4f
+	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/google/certificate-transparency-go v1.0.21 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect

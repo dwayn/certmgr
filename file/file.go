@@ -35,6 +35,22 @@ type File struct {
 	mode     os.FileMode
 }
 
+// NewFile constructor for file structs that handles parsing, lookup and
+//	setting defaults for files
+func NewFile(path, owner, group, mode string) (*File, error) {
+	f := &File{
+		Path:  path,
+		Owner: owner,
+		Group: group,
+		Mode:  mode,
+	}
+	err := f.parse()
+	if err != nil {
+		return nil, err
+	}
+	return f, nil
+}
+
 // UnmarshalYAML implement yaml unmarshalling logic
 func (f *File) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	type alias File
@@ -209,6 +225,24 @@ func (f *File) Unlink() error {
 
 func (f *File) String() string {
 	return f.Path
+}
+
+// NewCertificateFile constructor for file structs that handles parsing, lookup and
+//	setting defaults for files
+func NewCertificateFile(path, owner, group, mode string) (*CertificateFile, error) {
+	f := &CertificateFile{
+		File{
+			Path:  path,
+			Owner: owner,
+			Group: group,
+			Mode:  mode,
+		},
+	}
+	err := f.parse()
+	if err != nil {
+		return nil, err
+	}
+	return f, nil
 }
 
 // CertificateFile is a convenience wrapper of File
